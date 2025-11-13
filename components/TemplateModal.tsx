@@ -40,10 +40,37 @@ export const TemplateModal: React.FC<TemplateModalProps> = ({ isOpen, onClose, s
                 const values = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v => v.replace(/^"|"$/g, '').trim());
                 if (values.length >= 4) {
                     const rawThumbnail = values[4] || '';
-                    // Handle both full URLs and Google Drive IDs in the thumbnail column
-                    const finalThumbnail = rawThumbnail && !rawThumbnail.startsWith('http')
-                        ? `https://drive.google.com/uc?export=view&id=${rawThumbnail}`
-                        : rawThumbnail;
+                    let finalThumbnail = rawThumbnail; // Default to the original value
+
+                    try {
+                        // Check if it's a Google Drive URL
+                        if (rawThumbnail.includes('drive.google.com')) {
+                            let fileId = null;
+                            // Case 1: URL has query params (e.g., /uc?id=... or /uc?export=view&id=...)
+                            if (rawThumbnail.includes('?')) {
+                                const url = new URL(rawThumbnail);
+                                fileId = url.searchParams.get('id');
+                            }
+                            // Case 2: URL is in the format /d/FILE_ID/
+                            else {
+                                const match = rawThumbnail.match(/d\/([a-zA-Z0-9_-]+)/);
+                                if (match && match[1]) {
+                                    fileId = match[1];
+                                }
+                            }
+                            
+                            if (fileId) {
+                                // Reconstruct to a more reliable direct-view URL for embedding
+                                finalThumbnail = `https://drive.google.com/uc?id=${fileId}`;
+                            }
+                        } else if (rawThumbnail && !rawThumbnail.startsWith('http')) {
+                            // Case 3: The cell contains only the file ID
+                            finalThumbnail = `https://drive.google.com/uc?id=${rawThumbnail}`;
+                        }
+                    } catch (e) {
+                        // If URL parsing fails, quietly use the original URL.
+                        console.warn('Error parsing thumbnail URL, using original:', rawThumbnail, e);
+                    }
                     
                     return { 
                         category: values[0] || 'Lainnya', 
@@ -68,9 +95,11 @@ export const TemplateModal: React.FC<TemplateModalProps> = ({ isOpen, onClose, s
     };
     
     useEffect(() => {
-        fetchTemplates();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+        if (isOpen) {
+            fetchTemplates();
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isOpen]);
 
     useEffect(() => {
         let result = allTemplates;
@@ -100,7 +129,6 @@ export const TemplateModal: React.FC<TemplateModalProps> = ({ isOpen, onClose, s
 
     if (!isOpen) return null;
 
-    // FIX: Use a generic type parameter for reduce for clearer type inference.
     const groupedTemplates = filteredTemplates.reduce<Record<string, Template[]>>((acc, template) => {
         (acc[template.category] = acc[template.category] || []).push(template);
         return acc;
@@ -110,60 +138,90 @@ export const TemplateModal: React.FC<TemplateModalProps> = ({ isOpen, onClose, s
         <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 z-50" onClick={onClose}>
             <div className="bg-white rounded-xl shadow-2xl w-full max-w-6xl overflow-hidden flex flex-col h-[90vh]" onClick={e => e.stopPropagation()}>
                 {/* Header */}
-                <div className="flex items-center justify-between px-4 py-3 border-b border-slate-200 gap-2">
-                    <button onClick={onClose} className="p-2 rounded-md bg-slate-100 hover:bg-slate-200" title="Tutup"><X className="w-4 h-4" /></button>
-                    <button onClick={() => setViewMode(v => v === 'grid' ? 'list' : 'grid')} className="p-2 rounded-md bg-slate-100 hover:bg-slate-200" title="Ubah tampilan">
-                        {viewMode === 'grid' ? <LayoutGrid className="w-4 h-4"/> : <List className="w-4 h-4" />}
-                    </button>
-                    <div className="flex-1 relative">
-                        <Search className="w-4 h-4 text-slate-600 absolute left-2 top-1/2 -translate-y-1/2" />
-                        <input type="text" value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="w-full pl-8 p-2 border border-slate-300 rounded-md text-xs bg-white" placeholder="Cari template..." />
+                <div className="flex items-center justify-between px-4 py-3 border-b border-slate-200 gap-2 flex-wrap">
+                    <div className="flex items-center gap-2">
+                        <h2 className="text-lg font-semibold text-slate-900">Pilih Template</h2>
+                        <button onClick={fetchTemplates} className="p-2 rounded-md bg-blue-50 hover:bg-blue-100 text-blue-600" title="Sinkronisasi Template">
+                            <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
+                        </button>
                     </div>
-                    <select value={categoryFilter} onChange={e => setCategoryFilter(e.target.value)} className="p-2 border border-slate-300 rounded-md text-xs bg-white">
-                        {categories.map(c => <option key={c} value={c}>{c || 'Semua Kategori'}</option>)}
-                    </select>
-                    <button onClick={fetchTemplates} className="p-1.5 rounded-md bg-blue-50 hover:bg-blue-100 text-blue-600" title="Sinkronisasi Template"><RefreshCw className="w-4 h-4" /></button>
+                    <div className="flex items-center gap-2 flex-1 min-w-[300px]">
+                        <div className="flex-1 relative">
+                            <Search className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+                            <input type="text" value={searchTerm} onChange={e => setSearchTerm(e.target.value)} className="w-full pl-9 p-2 border border-slate-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Cari template..." />
+                        </div>
+                        <select value={categoryFilter} onChange={e => setCategoryFilter(e.target.value)} className="p-2 border border-slate-300 rounded-lg text-sm bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            {categories.map(c => <option key={c} value={c}>{c || 'Semua Kategori'}</option>)}
+                        </select>
+                         <button onClick={() => setViewMode(v => v === 'grid' ? 'list' : 'grid')} className="p-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600" title="Ubah tampilan">
+                            {viewMode === 'grid' ? <LayoutGrid className="w-5 h-5"/> : <List className="w-5 h-5" />}
+                        </button>
+                    </div>
                 </div>
 
                 {/* Body */}
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 flex-1 overflow-hidden px-2">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 flex-1 overflow-hidden">
                     <div className="lg:col-span-2 p-4 lg:border-r border-slate-200 h-full overflow-y-auto">
-                        {isLoading ? <div className="text-center">Loading templates...</div> :
+                        {isLoading ? (
+                             <div className="flex items-center justify-center h-full">
+                                <div className="spinner"></div>
+                            </div>
+                        ) :
+                        Object.keys(groupedTemplates).length > 0 ? (
                             Object.entries(groupedTemplates).map(([category, templates]) => (
-                                <div key={category}>
-                                    <h3 className="text-xs font-semibold text-slate-600 uppercase tracking-wide col-span-full mt-4 first:mt-0">{category}</h3>
+                                <div key={category} className="mb-6">
+                                    <h3 className="text-sm font-semibold text-slate-800 uppercase tracking-wide col-span-full mb-3 pb-2 border-b">{category}</h3>
                                     <div className={viewMode === 'grid' ? 'grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4' : 'flex flex-col gap-2'}>
-                                        {/* FIX: Cast `templates` to `Template[]` because `Object.entries` weakens the type to `unknown`. */}
-                                        {(templates as Template[]).map(template => (
+                                        {/* FIX: Add Array.isArray check as a type guard to prevent type errors. */}
+                                        {Array.isArray(templates) && templates.map(template => (
                                             <button key={template.name} onClick={() => handleTemplateClick(template)} onMouseEnter={() => setHoveredTemplate(template)}
-                                                className={`p-2 rounded-md bg-white hover:bg-slate-50 border transition-colors ${selectedTemplateNames.has(template.name) ? 'border-blue-500 ring-2 ring-blue-500' : 'border-slate-200'}`}>
-                                                <img src={template.thumbnail || `https://placehold.co/150x150/e2e8f0/64748b?text=${encodeURIComponent(template.name.charAt(0))}`} alt={template.name} className={`${viewMode === 'grid' ? 'w-full h-auto aspect-square' : 'w-10 h-10'} object-cover rounded-sm`} />
-                                                {viewMode === 'list' && <span className="text-sm font-medium text-slate-800 truncate">{template.name}</span>}
+                                                className={`p-2 rounded-lg bg-white hover:bg-slate-50 border-2 transition-all duration-200 text-left relative group ${selectedTemplateNames.has(template.name) ? 'border-blue-500 ring-2 ring-blue-500/50' : 'border-slate-200'}`}>
+                                                <img src={template.thumbnail || `https://placehold.co/150x150/e2e8f0/64748b?text=${encodeURIComponent(template.name.charAt(0))}`} alt={template.name} className={`${viewMode === 'grid' ? 'w-full h-auto aspect-square' : 'w-10 h-10'} object-cover rounded-md mb-2`} />
+                                                <span className="text-xs font-medium text-slate-900 line-clamp-2">{template.name}</span>
+                                                {selectedTemplateNames.has(template.name) && (
+                                                    <div className="absolute top-1 right-1 w-4 h-4 bg-blue-500 rounded-full text-white flex items-center justify-center text-xs">✓</div>
+                                                )}
                                             </button>
                                         ))}
                                     </div>
                                 </div>
                             ))
+                         ) : (
+                            <div className="text-center text-slate-700 py-10">
+                                <p className="font-semibold">Tidak ada template ditemukan</p>
+                                <p className="text-sm">Coba ubah filter atau kata kunci pencarian Anda.</p>
+                            </div>
+                         )
                         }
                     </div>
-                    <div className="p-4 h-full overflow-y-auto hidden lg:block">
-                        <div className="border border-slate-200 rounded-md overflow-hidden bg-slate-50">
-                            <img src={hoveredTemplate?.thumbnail || 'https://placehold.co/480x320/94a3b8/ffffff?text=Preview'} className="w-full h-auto object-cover" alt="Preview"/>
-                        </div>
-                        <div className="mt-3">
-                            <h3 className="text-sm font-semibold text-slate-800">{hoveredTemplate?.name || 'Tidak ada template terpilih'}</h3>
-                            <p className="text-xs text-slate-700">{hoveredTemplate?.description || 'Pilih salah satu template di kiri untuk melihat detail prompt.'}</p>
-                            <pre className="mt-2 p-2 bg-slate-100 rounded text-[11px] text-slate-800 whitespace-pre-wrap">{hoveredTemplate?.prompt}</pre>
+                    <div className="p-4 h-full overflow-y-auto hidden lg:block bg-slate-50">
+                         <div className="sticky top-0">
+                            <h3 className="font-semibold text-slate-900 mb-2">Pratinjau</h3>
+                            <div className="border border-slate-200 rounded-lg overflow-hidden bg-white shadow-sm">
+                                <img src={hoveredTemplate?.thumbnail || 'https://placehold.co/480x320/e2e8f0/9ca3af?text=Arahkan+ke+Template'} className="w-full h-auto object-cover aspect-[4/3]" alt="Preview"/>
+                            </div>
+                            <div className="mt-3">
+                                <h4 className="text-sm font-semibold text-slate-900">{hoveredTemplate?.name || 'Tidak ada template terpilih'}</h4>
+                                <p className="text-xs text-slate-700 mt-1">{hoveredTemplate?.description || 'Arahkan kursor ke salah satu template di kiri untuk melihat detailnya.'}</p>
+                                <p className="text-xs font-semibold text-slate-900 mt-3 mb-1">Prompt:</p>
+                                <pre className="mt-2 p-3 bg-slate-100 border border-slate-200 rounded text-[11px] text-slate-900 whitespace-pre-wrap font-mono">{hoveredTemplate?.prompt}</pre>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 {/* Footer */}
-                <div className="px-4 py-2 flex items-center justify-between gap-3 bg-white border-t border-slate-200">
-                    <div className="text-xs text-slate-700">Dipilih: {selectedTemplates.length} template</div>
+                <div className="px-4 py-3 flex items-center justify-between gap-3 bg-white border-t border-slate-200">
+                    <div className="text-sm text-slate-800 font-medium">
+                        <span className="font-bold text-blue-600">{selectedTemplates.length}</span> template dipilih
+                    </div>
                     <div className="flex items-center gap-2">
-                         <button onClick={() => onSelectionChange([])} className="px-3 py-1.5 text-sm rounded-md border border-slate-300 text-slate-800 hover:bg-slate-100">Deselect All</button>
-                        <button onClick={onClose} className="px-4 py-2 text-sm rounded-md bg-blue-600 text-white hover:bg-blue-700">Selesai</button>
+                         <button onClick={() => onSelectionChange([])} className="px-4 py-2 text-sm rounded-lg border border-slate-300 text-slate-900 hover:bg-slate-100 font-semibold" disabled={selectedTemplates.length === 0}>
+                            Hapus Pilihan
+                        </button>
+                        <button onClick={onClose} className="px-6 py-2 text-sm rounded-lg bg-blue-600 text-white hover:bg-blue-700 font-semibold">
+                            Selesai
+                        </button>
                     </div>
                 </div>
             </div>

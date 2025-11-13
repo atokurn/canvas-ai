@@ -206,8 +206,8 @@ export const ListPanel: React.FC<ListPanelProps> = ({ showMessage, onGenerate, o
     return (
         <div className="space-y-3">
              <div className="p-3 bg-slate-50 rounded-lg border border-slate-200 space-y-2">
-                <label htmlFor="list-sheet-url" className="text-sm font-semibold text-slate-800 block" title="Tempel URL dari Google Sheet yang dipublikasikan sebagai CSV.">URL Google Sheet (CSV)</label>
-                <input type="text" id="list-sheet-url" value={sheetUrl} onChange={e => setSheetUrl(e.target.value)} disabled={isBatchRunning} className="w-full p-2 border border-slate-300 rounded-md text-xs" placeholder="Tempel URL ...pub?output=csv" />
+                <label htmlFor="list-sheet-url" className="text-sm font-semibold text-slate-900 block" title="Tempel URL dari Google Sheet yang dipublikasikan sebagai CSV.">URL Google Sheet (CSV)</label>
+                <input type="text" id="list-sheet-url" value={sheetUrl} onChange={e => setSheetUrl(e.target.value)} disabled={isBatchRunning} className="w-full p-2 border border-slate-300 rounded-md text-xs bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Tempel URL ...pub?output=csv" />
                 <div className="flex gap-2 justify-between items-center mt-2">
                     <a href={DEFAULT_LIST_EXAMPLE_URL} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-600 hover:underline">Lihat Contoh</a>
                     <button onClick={saveUrl} disabled={isBatchRunning} className="text-xs py-1.5 px-3 rounded-md font-semibold bg-green-500 text-white hover:bg-green-600 disabled:bg-slate-400">Simpan</button>
@@ -215,9 +215,9 @@ export const ListPanel: React.FC<ListPanelProps> = ({ showMessage, onGenerate, o
             </div>
             
              <div className="p-3 bg-slate-50 rounded-lg border border-slate-200">
-                <label className="text-sm font-semibold text-slate-800 block">Status Batch</label>
+                <label className="text-sm font-semibold text-slate-900 block">Status Batch</label>
                  <div className="mt-2 flex items-center justify-between text-xs">
-                    <span className="font-medium text-slate-700">Total Prompt:</span>
+                    <span className="font-medium text-slate-800">Total Prompt:</span>
                     <span className="font-bold text-blue-600">{prompts.length}</span>
                 </div>
                 <div className="mt-2 p-2 bg-white border border-slate-200 rounded-md h-28 overflow-y-auto space-y-1">
@@ -229,7 +229,7 @@ export const ListPanel: React.FC<ListPanelProps> = ({ showMessage, onGenerate, o
                                 className={`p-1.5 rounded text-xs truncate transition-colors duration-300 ${
                                     isBatchRunning && index === currentPromptIndex
                                         ? 'bg-blue-100 text-blue-800 font-semibold'
-                                        : 'text-slate-700'
+                                        : 'text-slate-800'
                                 }`}
                                 title={p.prompt}
                             >
@@ -237,22 +237,22 @@ export const ListPanel: React.FC<ListPanelProps> = ({ showMessage, onGenerate, o
                             </div>
                         ))
                     ) : (
-                        <div className="flex items-center justify-center h-full text-xs text-slate-500">
+                        <div className="flex items-center justify-center h-full text-xs text-slate-600">
                             Daftar prompt akan muncul di sini.
                         </div>
                     )}
                 </div>
                 <div className="flex items-center justify-between mt-2">
-                    <span className="text-xs font-medium text-slate-700">Sedang Berjalan:</span>
-                    <span className="font-bold text-slate-800 text-xs truncate">{isBatchRunning ? `${currentPromptIndex + 1}/${prompts.length}` : 'N/A'}</span>
+                    <span className="text-xs font-medium text-slate-800">Sedang Berjalan:</span>
+                    <span className="font-bold text-slate-900 text-xs truncate">{isBatchRunning ? `${currentPromptIndex + 1}/${prompts.length}` : 'N/A'}</span>
                 </div>
                 <div className="flex items-center justify-between mt-1">
-                    <span className="text-xs font-medium text-slate-700">Prompt Berikutnya:</span>
+                    <span className="text-xs font-medium text-slate-800">Prompt Berikutnya:</span>
                     <span className="font-bold text-cyan-600 text-xs">{isBatchRunning && prompts.length > 1 ? `${countdown}s` : '--'}</span>
                 </div>
                 <div className="flex items-center justify-between mt-3 pt-3 border-t">
-                    <span className="text-xs font-medium text-slate-700">Total Waktu Berjalan:</span>
-                    <span className="font-bold text-slate-800 text-xs">{formatTime(totalTime)}</span>
+                    <span className="text-xs font-medium text-slate-800">Total Waktu Berjalan:</span>
+                    <span className="font-bold text-slate-900 text-xs">{formatTime(totalTime)}</span>
                 </div>
                 <button onClick={fetchPrompts} disabled={isBatchRunning} className="w-full mt-3 text-xs text-center py-1.5 px-3 rounded-md font-semibold bg-blue-500 text-white hover:bg-blue-600 flex items-center justify-center gap-2 disabled:bg-slate-400">
                     <RefreshCw size={14} /> Sinkronisasi Daftar Prompt
@@ -261,11 +261,11 @@ export const ListPanel: React.FC<ListPanelProps> = ({ showMessage, onGenerate, o
             
             <div className="flex gap-3">
                 <div className="flex-1 p-3 bg-gradient-to-r from-blue-50 to-cyan-50 rounded-lg border border-blue-200">
-                    <label htmlFor="image-count-list" className="text-xs font-medium text-slate-800 block mb-2" title="Jumlah gambar yang akan dibuat untuk setiap prompt dalam daftar.">Jumlah Gambar/Prompt</label>
+                    <label htmlFor="image-count-list" className="text-xs font-medium text-slate-900 block mb-2" title="Jumlah gambar yang akan dibuat untuk setiap prompt dalam daftar.">Jumlah Gambar/Prompt</label>
                     <input type="number" id="image-count-list" value={imageCount} onChange={e => setImageCount(Math.max(1, parseInt(e.target.value, 10)))} min="1" max="10" disabled={isBatchRunning} className="w-full p-2 border border-slate-300 rounded-md text-center text-xs" />
                 </div>
                 <div className="flex-1 p-3 bg-gradient-to-r from-blue-50 to-cyan-50 rounded-lg border border-blue-200">
-                    <label htmlFor="select-aspect-ratio-list" className="text-xs font-medium text-slate-800 block mb-2" title="Rasio aspek untuk semua gambar yang dihasilkan.">Rasio Aspek</label>
+                    <label htmlFor="select-aspect-ratio-list" className="text-xs font-medium text-slate-900 block mb-2" title="Rasio aspek untuk semua gambar yang dihasilkan.">Rasio Aspek</label>
                     <select id="select-aspect-ratio-list" value={aspectRatio} onChange={e => setAspectRatio(e.target.value)} disabled={isBatchRunning} className="w-full p-2 border border-slate-300 rounded-md text-xs">
                         <option value="1:1">1:1</option>
                         <option value="16:9">16:9</option>
@@ -277,14 +277,14 @@ export const ListPanel: React.FC<ListPanelProps> = ({ showMessage, onGenerate, o
             </div>
 
             <div className="border border-slate-200 rounded-lg bg-slate-50">
-                <button onClick={() => setAccordionOpen(!isAccordionOpen)} className="w-full flex justify-between items-center p-3 text-sm font-semibold text-slate-800">
+                <button onClick={() => setAccordionOpen(!isAccordionOpen)} className="w-full flex justify-between items-center p-3 text-sm font-semibold text-slate-900">
                     <span>Pengaturan System</span>
                     <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${isAccordionOpen ? 'rotate-180' : ''}`} />
                 </button>
                 {isAccordionOpen && (
                     <div className="p-3 border-t border-slate-200 space-y-4">
                         <div title="Atur jeda antar prompt: Statis (detik yang sama setiap kali) atau Random (detik acak dalam rentang Min/Max).">
-                            <label className="text-xs font-medium text-slate-800 block mb-2">Tipe Interval</label>
+                            <label className="text-xs font-medium text-slate-900 block mb-2">Tipe Interval</label>
                             <select value={intervalType} onChange={e => setIntervalType(e.target.value as 'static' | 'random')} disabled={isBatchRunning} className="w-full p-2 border border-slate-300 rounded-md text-xs">
                                 <option value="static">Statis (detik)</option>
                                 <option value="random">Random (detik)</option>
@@ -292,41 +292,41 @@ export const ListPanel: React.FC<ListPanelProps> = ({ showMessage, onGenerate, o
                         </div>
                         {intervalType === 'static' ? (
                             <div title="Detik jeda antar prompt saat tipe Statis dipilih.">
-                                <label className="text-xs font-medium text-slate-800 block mb-2">Interval Statis (detik)</label>
+                                <label className="text-xs font-medium text-slate-900 block mb-2">Interval Statis (detik)</label>
                                 <input type="number" value={staticInterval} onChange={e => setStaticInterval(Number(e.target.value))} min="1" disabled={isBatchRunning} className="w-full p-2 border border-slate-300 rounded-md text-center text-xs"/>
                             </div>
                         ) : (
                             <div className="flex gap-2">
                                 <div className="flex-1" title="Batas minimum jeda (detik) untuk tipe Random.">
-                                    <label className="text-xs font-medium text-slate-800 block mb-2">Min (detik)</label>
+                                    <label className="text-xs font-medium text-slate-900 block mb-2">Min (detik)</label>
                                     <input type="number" value={minInterval} onChange={e => setMinInterval(Number(e.target.value))} min="1" disabled={isBatchRunning} className="w-full p-2 border border-slate-300 rounded-md text-center text-xs"/>
                                 </div>
                                 <div className="flex-1" title="Batas maksimum jeda (detik) untuk tipe Random.">
-                                    <label className="text-xs font-medium text-slate-800 block mb-2">Max (detik)</label>
+                                    <label className="text-xs font-medium text-slate-900 block mb-2">Max (detik)</label>
                                     <input type="number" value={maxInterval} onChange={e => setMaxInterval(Number(e.target.value))} min="1" disabled={isBatchRunning} className="w-full p-2 border border-slate-300 rounded-md text-center text-xs"/>
                                 </div>
                             </div>
                         )}
                         <div className="pt-2 border-t flex items-center justify-between" title="Jika aktif, setiap gambar yang berhasil dibuat akan otomatis diunduh ke perangkat Anda.">
-                            <label className="text-sm font-semibold text-slate-800">Unduh Otomatis</label>
+                            <label className="text-sm font-semibold text-slate-900">Unduh Otomatis</label>
                             <input type="checkbox" checked={autoDownload} onChange={e => setAutoDownload(e.target.checked)} disabled={isBatchRunning} className="form-checkbox h-5 w-5 text-blue-600 rounded-md"/>
                         </div>
                         <div className="pt-2 border-t" title="Jika aktif, seluruh daftar prompt akan diulang dari awal setelah batch pertama selesai.">
                              <div className="flex items-center justify-between">
-                                <label className="text-sm font-semibold text-slate-800">Ulangi Batch</label>
+                                <label className="text-sm font-semibold text-slate-900">Ulangi Batch</label>
                                 <input type="checkbox" checked={repeatBatch} onChange={e => setRepeatBatch(e.target.checked)} disabled={isBatchRunning} className="form-checkbox h-5 w-5 text-blue-600 rounded-md"/>
                              </div>
                              <div className="mt-2 flex items-center gap-2" title="Jumlah pengulangan batch. Masukkan 0 untuk pengulangan tanpa batas.">
-                                 <label className="text-xs font-medium text-slate-800">Jumlah Pengulangan</label>
+                                 <label className="text-xs font-medium text-slate-900">Jumlah Pengulangan</label>
                                  <input type="number" value={repeatCount} onChange={e => setRepeatCount(Number(e.target.value))} min="0" disabled={isBatchRunning} className="w-24 p-1.5 border rounded-md text-center text-xs" />
                              </div>
                         </div>
                          <div className="pt-2 border-t flex items-center justify-between" title="Jika aktif, daftar prompt akan dimuat ulang dari Google Sheet setiap kali batch diulang. Berguna untuk daftar yang dinamis.">
-                            <label className="text-sm font-semibold text-slate-800">Sinkronisasi Otomatis</label>
+                            <label className="text-sm font-semibold text-slate-900">Sinkronisasi Otomatis</label>
                             <input type="checkbox" checked={autoSync} onChange={e => setAutoSync(e.target.checked)} disabled={isBatchRunning} className="form-checkbox h-5 w-5 text-blue-600 rounded-md"/>
                         </div>
                         <div className="pt-2 border-t flex items-center justify-between" title="Jika aktif, hasil dari Mode List tidak akan disimpan ke dalam tab Riwayat.">
-                            <label className="text-sm font-semibold text-slate-800">Nonaktifkan Riwayat (Mode List)</label>
+                            <label className="text-sm font-semibold text-slate-900">Nonaktifkan Riwayat (Mode List)</label>
                             <input type="checkbox" checked={disableHistory} onChange={e => setDisableHistory(e.target.checked)} disabled={isBatchRunning} className="form-checkbox h-5 w-5 text-blue-600 rounded-md"/>
                         </div>
                     </div>

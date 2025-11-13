@@ -17,7 +17,7 @@ interface ControlPanelProps {
 const RadioTab: React.FC<{ id: string, value: Mode, label: string, currentMode: Mode, onChange: (e: React.ChangeEvent<HTMLInputElement>) => void, disabled: boolean }> = ({ id, value, label, currentMode, onChange, disabled }) => (
     <>
         <input type="radio" id={id} name="mode" value={value} className="mode-radio" checked={currentMode === value} onChange={onChange} disabled={disabled} />
-        <label htmlFor={id} className={`flex-1 text-center py-2 px-4 rounded-md font-medium text-sm transition-all duration-200 ${disabled ? 'cursor-not-allowed text-slate-500' : 'cursor-pointer hover:bg-slate-200 text-slate-800'}`}>
+        <label htmlFor={id} className={`flex-1 text-center py-2 px-4 rounded-md font-medium text-sm transition-all duration-200 ${disabled ? 'cursor-not-allowed text-slate-600' : 'cursor-pointer hover:bg-slate-200 text-slate-900'}`}>
             {label}
         </label>
     </>
@@ -94,7 +94,7 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({ onStandardGenerate, 
                             </div>
                             <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">Canvas AI</h1>
                         </div>
-                        <p className="text-xs text-slate-600">Generasi gambar dengan teknologi Gemini</p>
+                        <p className="text-xs text-slate-700">Generasi gambar dengan teknologi Gemini</p>
                     </header>
 
                     {message && (
@@ -108,7 +108,7 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({ onStandardGenerate, 
                     )}
                     
                     <section>
-                        <label className="text-sm font-semibold text-slate-800 mb-2 block">Mode Input</label>
+                        <label className="text-sm font-semibold text-slate-900 mb-2 block">Mode Input</label>
                         <div className="flex gap-1 p-1 bg-slate-100 rounded-lg border border-slate-200">
                             <RadioTab id="mode-single" value="single" label="Single" currentMode={mode} onChange={(e) => setMode(e.target.value as Mode)} disabled={isGenerating} />
                             <RadioTab id="mode-template" value="template" label="Template" currentMode={mode} onChange={(e) => setMode(e.target.value as Mode)} disabled={isGenerating} />
@@ -119,14 +119,14 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({ onStandardGenerate, 
                     <section className="space-y-4">
                         {mode === 'template' && (
                             <div id="panel-template">
-                                <label className="text-sm font-semibold text-slate-800 mb-2 block">Template Gaya Terpilih</label>
+                                <label className="text-sm font-semibold text-slate-900 mb-2 block">Template Gaya Terpilih</label>
                                 <div id="selected-templates" className="grid grid-cols-2 sm:grid-cols-3 gap-2 mb-3">
                                   {selectedTemplates.map(t => (
                                       <div key={t.name} className="p-2 bg-slate-100 rounded text-xs truncate" title={t.name}>{t.name}</div>
                                   ))}
                                 </div>
                                 <div className="flex justify-between items-center">
-                                    <span id="selected-templates-count" className="text-xs text-slate-700">{selectedTemplates.length} template dipilih</span>
+                                    <span id="selected-templates-count" className="text-xs text-slate-800">{selectedTemplates.length} template dipilih</span>
                                     <button onClick={() => setTemplateModalOpen(true)} className="text-xs py-1.5 px-3 rounded-md font-semibold bg-blue-600 text-white hover:bg-blue-700" disabled={isGenerating}>Pilih Template</button>
                                 </div>
                             </div>
@@ -136,11 +136,11 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({ onStandardGenerate, 
                     </section>
 
                     <section className="space-y-3">
-                        <h2 className="text-sm font-semibold text-slate-800">Pengaturan</h2>
+                        <h2 className="text-sm font-semibold text-slate-900">Pengaturan</h2>
                         
                         {(mode === 'single') && (
                             <div className="p-3 bg-gradient-to-r from-blue-50 to-cyan-50 rounded-lg border border-blue-200">
-                                <label htmlFor="select-optimizer" className="text-xs font-medium text-slate-800 block mb-2">Optimasi Prompt</label>
+                                <label htmlFor="select-optimizer" className="text-xs font-medium text-slate-900 block mb-2">Optimasi Prompt</label>
                                 <select id="select-optimizer" value={optimizer} onChange={e => setOptimizer(e.target.value)} disabled={isGenerating} className="w-full p-2 border border-slate-300 rounded-md text-xs focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white">
                                     <option value="off">Tidak (Gunakan Asli)</option>
                                     <option value="image">Ya (Per Gambar)</option>
@@ -151,11 +151,11 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({ onStandardGenerate, 
                          {mode !== 'list' && (
                             <div className="flex gap-3">
                                 <div className="flex-1 p-3 bg-gradient-to-r from-blue-50 to-cyan-50 rounded-lg border border-blue-200">
-                                    <label htmlFor="image-count" className="text-xs font-medium text-slate-800 block mb-2">Jumlah Gambar</label>
+                                    <label htmlFor="image-count" className="text-xs font-medium text-slate-900 block mb-2">Jumlah Gambar</label>
                                     <input type="number" id="image-count" value={imageCount} onChange={e => setImageCount(Math.max(1, parseInt(e.target.value, 10)))} min="1" max="10" disabled={isGenerating} className="w-full p-2 border border-slate-300 rounded-md text-center text-xs focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"/>
                                 </div>
                                 <div className="flex-1 p-3 bg-gradient-to-r from-blue-50 to-cyan-50 rounded-lg border border-blue-200">
-                                    <label htmlFor="select-aspect-ratio" className="text-xs font-medium text-slate-800 block mb-2">Rasio Aspek</label>
+                                    <label htmlFor="select-aspect-ratio" className="text-xs font-medium text-slate-900 block mb-2">Rasio Aspek</label>
                                     <select id="select-aspect-ratio" value={aspectRatio} onChange={e => setAspectRatio(e.target.value)} disabled={isGenerating} className="w-full p-2 border border-slate-300 rounded-md text-xs focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white">
                                         <option value="1:1">1:1</option>
                                         <option value="16:9">16:9</option>
@@ -197,10 +197,10 @@ export const ControlPanel: React.FC<ControlPanelProps> = ({ onStandardGenerate, 
                 <section className="p-4 lg:p-6 border-t-2 border-slate-200 space-y-3 bg-gradient-to-t from-slate-50 to-white">
                     {(mode === 'single' || mode === 'template') && (
                          <div id="panel-single">
-                            <label htmlFor="prompt-single" className="text-sm font-semibold text-slate-800 mb-2 block">
+                            <label htmlFor="prompt-single" className="text-sm font-semibold text-slate-900 mb-2 block">
                                 {mode === 'template' ? 'Subjek Tambahan (opsional)' : 'Deskripsi Gambar / Subjek'}
                             </label>
-                            <textarea id="prompt-single" rows={5} value={prompt} onChange={e => setPrompt(e.target.value)} disabled={isGenerating} className="w-full p-3 border-2 border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white placeholder:text-slate-500 text-sm resize-none" placeholder="Misalnya: Kucing berwarna emas sedang bermain di taman cyberpunk..."></textarea>
+                            <textarea id="prompt-single" rows={5} value={prompt} onChange={e => setPrompt(e.target.value)} disabled={isGenerating} className="w-full p-3 border-2 border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white placeholder:text-slate-600 text-sm resize-none" placeholder="Misalnya: Kucing berwarna emas sedang bermain di taman cyberpunk..."></textarea>
                         </div>
                     )}
                     

@@ -50,10 +50,10 @@ export const CanvasView: React.FC<CanvasViewProps> = ({ generatedImages, onImage
         <main className="w-full lg:w-2/3 xl:w-3/4 p-4 lg:p-8 min-h-screen lg:h-screen lg:overflow-y-auto">
             <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 pb-6 border-b-2 border-slate-200">
                 <div className="flex items-center gap-6 mb-4 sm:mb-0">
-                    <h2 onClick={() => setView('canvas')} className={`text-2xl cursor-pointer pb-2 transition-colors ${view === 'canvas' ? 'font-bold text-slate-900 border-b-2 border-blue-500' : 'font-medium text-slate-500 hover:text-slate-700'}`}>
+                    <h2 onClick={() => setView('canvas')} className={`text-2xl cursor-pointer pb-2 transition-colors ${view === 'canvas' ? 'font-bold text-slate-900 border-b-2 border-blue-500' : 'font-medium text-slate-600 hover:text-slate-800'}`}>
                         Hasil
                     </h2>
-                    <h2 onClick={() => setView('history')} className={`text-2xl cursor-pointer pb-2 transition-colors ${view === 'history' ? 'font-bold text-slate-900 border-b-2 border-blue-500' : 'font-medium text-slate-500 hover:text-slate-700'}`}>
+                    <h2 onClick={() => setView('history')} className={`text-2xl cursor-pointer pb-2 transition-colors ${view === 'history' ? 'font-bold text-slate-900 border-b-2 border-blue-500' : 'font-medium text-slate-600 hover:text-slate-800'}`}>
                         Riwayat
                     </h2>
                 </div>

@@ -287,11 +287,11 @@ export const CropModal: React.FC<CropModalProps> = ({ isOpen, imageSrc, onClose,
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50" onClick={onClose}>
             <div className="bg-white rounded-xl shadow-2xl w-full max-w-5xl overflow-hidden flex flex-col max-h-[90vh]" onClick={e => e.stopPropagation()}>
                 <div className="px-4 py-3 border-b flex items-center justify-between">
-                    <h3 className="text-sm font-semibold text-slate-800">Edit Crop Referensi Subjek</h3>
+                    <h3 className="text-sm font-semibold text-slate-900">Edit Crop Referensi Subjek</h3>
                     <button onClick={onClose}><X size={20} /></button>
                 </div>
                 <div className="px-4 py-2 border-b flex items-center gap-2 flex-wrap">
-                    <span className="text-xs font-medium text-slate-700">Aspek Rasio:</span>
+                    <span className="text-xs font-medium text-slate-800">Aspek Rasio:</span>
                     <div className="flex flex-wrap gap-1">
                         {aspectRatios.map(ratio => (
                             <button
@@ -300,7 +300,7 @@ export const CropModal: React.FC<CropModalProps> = ({ isOpen, imageSrc, onClose,
                                 className={`px-2 py-1 text-xs rounded-md font-semibold transition-colors ${
                                     aspectRatio === ratio
                                         ? 'bg-blue-600 text-white'
-                                        : 'bg-slate-200 text-slate-800 hover:bg-slate-300'
+                                        : 'bg-slate-200 text-slate-900 hover:bg-slate-300'
                                 }`}
                             >
                                 {ratio}
@@ -313,12 +313,12 @@ export const CropModal: React.FC<CropModalProps> = ({ isOpen, imageSrc, onClose,
                         <canvas ref={canvasRef} className="w-full h-auto block border rounded-md" onMouseDown={handleMouseDown} onMouseMove={handleMouseMove} onMouseUp={handleMouseUp} onMouseLeave={handleMouseUp} />
                     </div>
                     <div className="hidden md:block">
-                        <p className="text-xs font-medium text-slate-800 mb-1">Preview</p>
+                        <p className="text-xs font-medium text-slate-900 mb-1">Preview</p>
                         <canvas ref={previewCanvasRef} className="w-full h-auto border rounded-md bg-slate-100" />
                     </div>
                 </div>
                 <div className="px-4 py-3 border-t flex justify-end gap-2">
-                    <button onClick={onClose} className="px-3 py-1.5 text-sm rounded-md border text-slate-800 hover:bg-slate-100">Batal</button>
+                    <button onClick={onClose} className="px-3 py-1.5 text-sm rounded-md border text-slate-900 hover:bg-slate-100">Batal</button>
                     <button onClick={handleApply} className="px-3 py-1.5 text-sm rounded-md bg-blue-600 text-white hover:bg-blue-700">Simpan Crop</button>
                 </div>
             </div>

@@ -13,6 +13,7 @@ export interface HistoryItem {
   prompt: string;
   base64: string;
   timestamp: number;
+  model?: string;
 }
 
 export interface Template {

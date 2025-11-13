@@ -58,7 +58,7 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({ id, label, descrip
 
     return (
         <div className={`p-3 bg-slate-50 rounded-lg border-2 border-dashed  transition-colors ${disabled ? 'border-slate-200' : 'border-slate-300 hover:border-blue-400'}`}>
-            <label htmlFor={id} className={`text-xs font-semibold mb-2 block ${disabled ? 'text-slate-500' : 'text-slate-800'}`}>{label}</label>
+            <label htmlFor={id} className={`text-xs font-semibold mb-2 block ${disabled ? 'text-slate-600' : 'text-slate-900'}`}>{label}</label>
             <input 
                 type="file" 
                 id={id} 
@@ -66,7 +66,7 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({ id, label, descrip
                 multiple={!useCropper}
                 onChange={handleFileChange} 
                 disabled={disabled}
-                className="block w-full text-xs text-slate-600 file:mr-3 file:py-2 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-blue-500 file:text-white hover:file:bg-blue-600 cursor-pointer disabled:file:bg-slate-400 disabled:cursor-not-allowed" 
+                className="block w-full text-xs text-slate-700 file:mr-3 file:py-2 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-blue-500 file:text-white hover:file:bg-blue-600 cursor-pointer disabled:file:bg-slate-400 disabled:cursor-not-allowed" 
             />
             {files.length > 0 && (
                 <>
@@ -80,12 +80,12 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({ id, label, descrip
                             />
                         ))}
                     </div>
-                    <button onClick={clearFiles} disabled={disabled} className="text-xs text-red-500 hover:text-red-700 mt-2 w-full text-center font-medium disabled:text-slate-500 disabled:cursor-not-allowed">
+                    <button onClick={clearFiles} disabled={disabled} className="text-xs text-red-500 hover:text-red-700 mt-2 w-full text-center font-medium disabled:text-slate-600 disabled:cursor-not-allowed">
                         Hapus
                     </button>
                 </>
             )}
-            <p className={`text-xs mt-2 ${disabled ? 'text-slate-500' : 'text-slate-600'}`}>{description}</p>
+            <p className={`text-xs mt-2 ${disabled ? 'text-slate-600' : 'text-slate-700'}`}>{description}</p>
             {useCropper && imageToCrop && (
                 <CropModal 
                     isOpen={isCropModalOpen}

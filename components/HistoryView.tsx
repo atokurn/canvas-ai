@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { HistoryItem } from '../types';
 import { loadHistory } from '../services/databaseService';
@@ -27,8 +28,15 @@ const HistoryCard: React.FC<{ item: HistoryItem, onImageClick: (url: string) => 
         <div className="flex flex-col sm:flex-row bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow border border-slate-200">
             <img src={item.base64} alt="History" onClick={() => onImageClick(item.base64)} className="w-full sm:w-24 h-auto sm:h-24 object-cover rounded-md mb-3 sm:mb-0 sm:mr-4 border border-slate-300 cursor-pointer" />
             <div className="flex-1">
-                <p className="text-xs text-slate-600 mb-1">{date} - ID: {item.id.substring(0, 8)}</p>
-                <p className="font-medium text-slate-800 line-clamp-3" title={item.prompt}>{item.prompt}</p>
+                <div className="flex items-center justify-between flex-wrap gap-2 mb-1">
+                    <p className="text-xs text-slate-700">{date} - ID: {item.id.substring(0, 8)}</p>
+                    {item.model && (
+                        <span className="text-xs text-slate-600 font-mono bg-slate-100 px-2 py-0.5 rounded">
+                            {item.model}
+                        </span>
+                    )}
+                </div>
+                <p className="font-medium text-slate-900 line-clamp-3" title={item.prompt}>{item.prompt}</p>
             </div>
             <div className="flex sm:flex-col justify-end gap-2 mt-3 sm:mt-0 sm:ml-4">
                 <button onClick={handleDownload} className="p-2 rounded-full bg-green-100 hover:bg-green-200 text-green-700 transition-colors"><Download className="w-4 h-4" /></button>
@@ -53,11 +61,11 @@ export const HistoryView: React.FC<HistoryViewProps> = ({ onImageClick }) => {
     }, []);
 
     if (loading) {
-        return <div className="text-center text-slate-600 py-10">Loading history...</div>;
+        return <div className="text-center text-slate-700 py-10">Loading history...</div>;
     }
 
     if (history.length === 0) {
-        return <div className="text-center text-slate-600 py-10">Tidak ada riwayat. Hasilkan gambar untuk memulai!</div>;
+        return <div className="text-center text-slate-700 py-10">Tidak ada riwayat. Hasilkan gambar untuk memulai!</div>;
     }
 
     return (

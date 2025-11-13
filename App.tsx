@@ -23,6 +23,7 @@ const App: React.FC = () => {
     const processImage = useCallback(async (prompt: string, index: number, options: any) => {
         const { optimizer, subjectRefs, styleRefs, aspectRatio, disableHistory, autoDownload } = options;
         const useMultimodal = subjectRefs.length > 0 || styleRefs.length > 0;
+        const model = useMultimodal ? 'imagen-3.0-capability-001' : 'imagen-4.0-generate-001';
 
         try {
             let finalPrompt = prompt;
@@ -51,7 +52,8 @@ const App: React.FC = () => {
                     id: `img_${Date.now()}_${index}`,
                     prompt: finalPrompt,
                     base64,
-                    timestamp: Date.now()
+                    timestamp: Date.now(),
+                    model: model,
                 };
                 await saveImageToHistory(historyItem);
             }
