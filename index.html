@@ -1,0 +1,72 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gemini Generative Canvas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Geist:wght@600;700&display=swap');
+      
+      :root {
+          --primary: #3b82f6;
+          --primary-dark: #2563eb;
+          --accent: #06b6d4;
+          --success: #10b981;
+          --neutral-dark: #1f2937;
+          --neutral-light: #f9fafb;
+      }
+      
+      body {
+          font-family: 'Inter', sans-serif;
+      }
+      
+      h1, h2, h3 {
+          font-family: 'Geist', sans-serif;
+      }
+
+      .mode-radio:checked + label {
+          @apply bg-blue-500 text-white border-blue-500;
+      }
+      .mode-radio { display: none; }
+      
+      ::-webkit-scrollbar {
+          width: 8px;
+          height: 8px;
+      }
+      ::-webkit-scrollbar-track {
+          @apply bg-slate-100 rounded-lg;
+      }
+      ::-webkit-scrollbar-thumb {
+          @apply bg-slate-400 rounded-lg hover:bg-slate-500;
+      }
+      
+      .spinner {
+          @apply border-4 border-slate-200 w-10 h-10 rounded-full;
+          border-left-color: var(--primary);
+          animation: spin 1s ease infinite;
+      }
+      @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "jszip": "https://aistudiocdn.com/jszip@^3.10.1",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.29.1",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.553.0"
+  }
+}
+</script>
+</head>
+  <body class="bg-gradient-to-br from-slate-50 via-blue-50 to-cyan-50">
+    <div id="root"></div>
+  </body>
+</html>

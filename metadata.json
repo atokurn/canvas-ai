@@ -1,0 +1,5 @@
+{
+  "name": "Gemini Generative Canvas",
+  "description": "An advanced web application for generating images using Gemini, featuring multiple input modes like single prompt, template-based generation, and batch processing from a Google Sheet. It supports subject/style references, prompt optimization, and includes an image cropping tool.",
+  "requestFramePermissions": []
+}
